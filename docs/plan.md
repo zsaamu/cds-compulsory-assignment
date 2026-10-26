@@ -45,7 +45,7 @@ gantt
 
 ## Issues and ownership
 
-The owner coordinates the result; supporting members still document their own work. Samuele's tasks are assigned to `zsaamu`. Kyrylo and Azade are named below and in their issue descriptions; their GitHub assignee fields are pending approval and acceptance of repository access.
+The owner coordinates the result; supporting members still document their own work. Samuele's tasks are assigned to `zsaamu`. Write-access invitations have been sent to `Kyrylo-Vorona` and `azade1416`. Their responsibilities are named below and in the issue descriptions; GitHub assignment is waiting for them to accept the invitations.
 
 | Issue | Task | Owner | Target | Depends on |
 | --- | --- | --- | --- | --- |
