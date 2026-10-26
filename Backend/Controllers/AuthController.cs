@@ -1,8 +1,10 @@
 using Backend.Data;
 using Backend.DTOs;
 using Backend.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using IAuthorizationService = Backend.Services.IAuthorizationService;
 
 namespace Backend.Controllers;
 
@@ -11,10 +13,12 @@ namespace Backend.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
+    private readonly IAuthorizationService _authService;
 
-    public AuthController(AppDbContext context)
+    public AuthController(AppDbContext context, IAuthorizationService authService)
     {
         _context = context;
+        _authService = authService;
     }
     
     [HttpPost("register")]
@@ -49,12 +53,22 @@ public class AuthController : ControllerBase
         {
             return Unauthorized(new { message = "Invalid username or password" });
         }
-        
+        var token = _authService.GenerateToken(user);
+
         return Ok(new 
         { 
             message = "Login successful", 
+            token = token, 
             username = user.Username, 
             role = user.Role 
         });
+    }
+    
+    [HttpGet("users")]
+    [Authorize] 
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _context.Users.Select(u => new { u.Id, u.Username, u.Role }).ToListAsync();
+        return Ok(users);
     }
 }
