@@ -1,38 +1,57 @@
 # CDS compulsory assignment
 
-A web-based login and user management platform for Kvist & Bjælke ApS, with a network plan and Docker deployment on the academy's virtual infrastructure.
+Login and user management platform for Kvist & Bjælke ApS, with network planning and Docker deployment. This README is the combined report for **CDS.security** and **CDS.infrastructure**.
 
-This repository covers **CDS.security** and **CDS.infrastructure**. The README is the combined assignment report.
+Status: repository setup. Application development and deployment are pending.
 
-## Current status
+## Responsibilities
 
-Project setup and planning are in progress. The application has not been implemented or deployed in this repository. Test results and screenshots will be added after the work has been verified.
-
-## Team
-
-| Member | GitHub | Main responsibility |
+| Member | GitHub | Responsibility |
 | --- | --- | --- |
-| Samuele | [zsaamu](https://github.com/zsaamu) | Infrastructure, integration testing, and report coordination |
+| Samuele | [zsaamu](https://github.com/zsaamu) | Infrastructure, integration testing, report coordination, and final review/merge |
 | Kyrylo | [Kyrylo-Vorona](https://github.com/Kyrylo-Vorona) | Backend, database, authentication, and authorization |
 | Azade | [azade1416](https://github.com/azade1416) | Frontend and API integration |
 
-Each member documents their own work. We review the full solution together. Docker deployment is shared by Samuele and Kyrylo.
+Each member documents their own work. Samuele and Kyrylo handle Docker deployment together.
 
-## Scope
+## Issues and workflow
 
-- Log in with a username and password, and log out.
-- Store password hashes and keep passwords and hashes out of API responses, logs, and screenshots.
-- Apply the assignment's user, superuser, and admin permissions on the backend.
-- Provide a simple user table and the management actions allowed for each role.
-- Run the application in Docker on an Ubuntu Server VM in VLAN 571.
-- Access the application from a second VM in VLAN 570 using a TCP port from 8000 to 8100.
-- Document the company network plan, subnetting, deployment, tests, and lessons learned.
+The [agreed issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) list owners, dependencies, target dates, and acceptance checks. Start with [repository setup #1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and [lab access #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
 
-Marketplace features such as products, purchases, categories, and inventory are outside this assignment.
+Work on task branches and open pull requests to `main`. Samuele reviews, tests, and merges the changes. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [the reuse plan](docs/reuse.md) for the selected Satin Road functions.
+
+```text
+backend/          API and database
+frontend/         Browser interface
+tests/            Security and integration tests
+infrastructure/   Network plan and deployment
+docs/             Work plan, reuse notes, and test plan
+README.md         Combined assignment report
+```
+
+## Work plan
+
+| Date | Target |
+| --- | --- |
+| 26 October | Repository, responsibilities, and lab access |
+| 27-28 October | Login, user management, and all three roles |
+| 29 October | Integration and permission tests |
+| 30 October | Docker, IP plan, subnetting, and network diagram |
+| 2 November | VM deployment and tests between VLANs |
+| 3 November | Fixes, evidence, and completed report |
+| 4 November | Final review and early submission |
+| 5 November | Study and contingency |
+
+All dates are in 2026. Work is scheduled on weekdays only. See the [detailed timeline](docs/plan.md) and [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones).
 
 ## CDS.security
 
-### Required permissions
+### Application requirements
+
+- Web application with username/password login.
+- Passwords stored with a secure password-hashing algorithm and never exposed in plaintext.
+- Backend authorization for the three required roles.
+- Application capable of running in Docker.
 
 | Action | User | Superuser | Admin |
 | --- | --- | --- | --- |
@@ -41,70 +60,44 @@ Marketplace features such as products, purchases, categories, and inventory are 
 | Create, update, and delete superuser or admin accounts | No | No | Yes |
 | Assign or change a privileged role | No | No | Yes |
 
-Every protected request must be checked by the server, including the target account's role. Interface controls should reflect those permissions. Passwords and hashes must never appear in the table.
+Check permissions on every protected request, including the target account's role. Keep passwords and hashes out of the user table and API responses.
 
-### Implementation and decisions
+### Required documentation
 
-Planned starting point: reuse the team's .NET API, React login screen, session handling, password hasher, and Docker build patterns from [Satin Road](https://github.com/Kyrylo-Vorona/satin-road-kas). The team must confirm the technology choices and adapt the code to this assignment before calling it complete.
-
-To complete during implementation:
-
-- Describe authentication, password hashing, session handling, and role checks.
-- Explain the chosen technologies and security alternatives considered.
-- Document database creation and the first administrator account without committing credentials.
-- Add screenshots showing the required functions and permission checks.
+Describe the platform, authentication, password handling, role checks, technology choices, and security alternatives considered. Add relevant screenshots and verified setup and test instructions as implementation progresses. Use [the test plan](docs/test-plan.md) to collect results.
 
 ## CDS.infrastructure
 
-### Assigned lab networks
+### Company network plan
 
-| Purpose | VLAN | Network | VM operating system |
+Cover 15 desktops, 10 laptops, 3 printers, 3 servers, 12 IP phones, 4 wireless access points, 6 cameras, network equipment, and a variable number of guest devices, allowing for growth.
+
+- Justify the network segmentation.
+- Specify private subnets, masks/CIDR, gateways, device groups, and DHCP or static addressing.
+- Explain network addresses, masks, usable host counts, sizing, and growth for at least two subnets.
+- Include a diagram showing Internet access, router/firewall, switches, VLANs, servers, device groups, wireless networks, and their connections.
+
+### Lab deployment
+
+| Machine | VLAN | Network | Operating system |
 | --- | --- | --- | --- |
-| Client | 570 | 10.5.70.0/24 | To be selected; the brief does not prescribe a client OS |
-| Server | 571 | 10.5.71.0/24 | Ubuntu Server |
+| Client VM | 570 | 10.5.70.0/24 | To be selected |
+| Server VM | 571 | 10.5.71.0/24 | Ubuntu Server |
 
-The brief abbreviates the server network as `10.5.71/24`; this plan interprets it as `10.5.71.0/24`. Confirm the gateway, DNS, DHCP availability, and permitted VM addresses before configuring the lab. Do not assume that `.1` is the gateway or pick an address without checking its allocation.
+Install Docker on the server and deploy the login platform in a container. Access it from the client VM using the server's IP and a TCP port from **8000 to 8100**; the proposed port is **8080**.
 
-Proposed application port: **TCP 8080**, within the required range. The brief states that the network firewall already permits TCP 8000-8100 from VLAN 570 to VLAN 571. We must still verify VM networking, the host firewall, and container access.
+The network firewall already permits TCP 8000-8100 from VLAN 570 to VLAN 571. Confirm lab access and the allocated VM addresses, gateways, DNS, and DHCP settings in [issue #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2). Follow [the infrastructure preparation](infrastructure/README.md) for the lab session.
 
-The final setup requires two VMs. The server runs Docker inside Ubuntu Server; an LXC container is not the server VM required by this brief.
+### Required evidence and explanation
 
-### Company network plan and subnetting
+Document Ubuntu Server installation, both VMs' IP configuration, Docker installation, the running container and published port, and successful use of the platform from the client VM.
 
-Pending: a justified segmentation plan covering 15 desktops, 10 laptops, 3 printers, 3 servers, 12 IP phones, 4 wireless access points, 6 cameras, network equipment, and a variable number of guest devices, with room for growth.
+Explain VLAN separation, routing between the networks, the firewall's role, and why access is limited to specific ports. Record implementation problems, their causes, fixes, and retest results.
 
-The final table must state the private network, CIDR or mask, gateway, device types, and DHCP or static addressing for each segment. Explain network addresses, usable host counts, sizing, and growth for at least two subnets.
+## Final report and submission
 
-### Network diagram
+Complete the Security and Infrastructure sections with the implemented solution, screenshots, tables, diagrams, and test results. Conclude with a short reflection on how security and infrastructure connect, deployment lessons, and changes needed for a real company.
 
-Pending: the overall company design, including Internet access, router/firewall, switches, VLANs, servers, employee devices, other device groups, wireless networks, and segment connections. Only the client/server lab portion needs to be implemented.
+Register the group on Moodle, confirm the assessor can access the GitHub repository, and submit through Moodle by **6 November 2026 at 23:59**. Our target submission date is **4 November**.
 
-The brief calls the diagram optional in section 2.5 but lists it in the submission requirements. We will include it.
-
-### Installation, deployment, and evidence
-
-Pending: Ubuntu Server installation, server/client IP configuration, Docker installation, application startup, and browser access from the client VM.
-
-Explain why the VLANs are separate, why traffic between them needs routing, how the firewall controls access, and why only specific ports are allowed.
-
-Collect evidence as the work is performed. A local `localhost` test does not demonstrate access from VLAN 570 to VLAN 571.
-
-## Setup and testing
-
-There is no runnable application yet. Backend, frontend, Docker, database setup, and test commands will be added and checked in their implementation issues. Do not reuse the shared marketplace database for destructive tests.
-
-## Plan and submission
-
-Work is scheduled on weekdays only. The target is to finish implementation and documentation by **3 November 2026**, review and submit on **4 November**, and keep **5 November** for study and unexpected problems.
-
-Official deadline in the assignment PDF: **6 November 2026 at 23:59 on Moodle**. Register the group on Moodle and confirm that the assessor can access the submitted repository.
-
-The PDF does not require an oral presentation. Explaining the work to each other is part of our study plan.
-
-## Challenges and final reflection
-
-To be written from the actual work: problems encountered, their causes and fixes, how security and infrastructure connect, what we learned about deployment, and what we would change for a real company.
-
-## Assignment reference
-
-Requirements are taken from `Compulsory-assignment.pdf`, case Kvist & Bjælke ApS, especially pages 2-9. Course exercises are learning references; their extra tasks are not automatically requirements of this assignment. The source PDFs and lab credentials are not included in this repository.
+Source: `Compulsory-assignment.pdf`, case Kvist & Bjælke ApS, pages 2-9.
