@@ -9,7 +9,8 @@ Choose an assigned issue before starting. Read its expected result, acceptance c
 - Use a separate branch for each later task, for example `backend/login`, `frontend/user-table`, or `infrastructure/ip-plan`.
 - Start new task branches from the latest `main`. A dependent task can wait for the first pull request or clearly state its dependency.
 - Open a pull request to `main`, link the issue, and describe what changed and what was checked.
-- Ask another member to review before merging. This is the team's workflow; a GitHub branch protection rule has not been configured.
+- GitHub requires one approving review before merging into `main`, including for administrators. New commits dismiss previous approvals, and review conversations must be resolved.
+- Force pushes and deletion of `main` are blocked. Required automated status checks will be added when the test workflow is available.
 
 To start after cloning:
 
