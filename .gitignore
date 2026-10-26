@@ -1,0 +1,26 @@
+# Local credentials and environment settings
+.env
+.env.*
+!.env.example
+appsettings.Local.json
+appsettings.*.Local.json
+
+# Build output and installed dependencies
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/coverage/
+**/TestResults/
+
+# Editor settings, logs, and local database files
+.vs/
+.idea/
+*.user
+*.suo
+*.log
+*.db
+*.db-shm
+*.db-wal
+.DS_Store
+Thumbs.db

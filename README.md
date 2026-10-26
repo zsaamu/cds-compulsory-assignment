@@ -8,6 +8,30 @@ This repository covers **CDS.security** and **CDS.infrastructure**. The README i
 
 Project setup and planning are in progress. The application has not been implemented or deployed in this repository. Test results and screenshots will be added after the work has been verified.
 
+## Start here
+
+- [Open tasks and owners](https://github.com/zsaamu/cds-compulsory-assignment/issues)
+- [Daily plan and timeline](docs/plan.md)
+- [Milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones)
+- [How we work together](CONTRIBUTING.md)
+- [What to reuse from Satin Road](docs/reuse.md)
+- [Application and lab test plan](docs/test-plan.md)
+- [Infrastructure preparation](infrastructure/README.md)
+
+Today: review the repository setup in [#1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and resolve lab access in [#2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2). Backend and frontend implementation can then proceed in parallel.
+
+```text
+backend/          API and database setup; owner: Kyrylo
+frontend/         Browser interface; owner: Azade
+tests/            Security and integration checks
+infrastructure/   Network plan and lab deployment notes
+docs/             Timeline, reuse notes, and test plan
+.github/          Issue and pull request templates
+README.md         Combined assignment report
+```
+
+The application folders currently contain preparation notes, not runnable projects. The setup work is on `Samuele`; later tasks should use focused branches and pull requests to `main`.
+
 ## Team
 
 | Member | GitHub | Main responsibility |
