@@ -8,9 +8,9 @@ Status: repository setup. Application development and deployment are pending.
 
 | Member | GitHub | Responsibility |
 | --- | --- | --- |
-| Samuele | [zsaamu](https://github.com/zsaamu) | Infrastructure, integration testing, report coordination, and final review/merge |
-| Kyrylo | [Kyrylo-Vorona](https://github.com/Kyrylo-Vorona) | Backend, database, authentication, and authorization |
-| Azade | [azade1416](https://github.com/azade1416) | Frontend and API integration |
+| Samuele | [zsaamu](https://github.com/zsaamu) | Network plan, VMs, testing, report coordination, and final review/merge |
+| Kyrylo | [Kyrylo-Vorona](https://github.com/Kyrylo-Vorona) | User account storage, username/password authentication, password hashing, and role permissions |
+| Azade | [azade1416](https://github.com/azade1416) | Web login, user table, and account management actions for each role |
 
 Each member documents their own work. Samuele and Kyrylo handle Docker deployment together.
 
@@ -18,16 +18,11 @@ Each member documents their own work. Samuele and Kyrylo handle Docker deploymen
 
 The [agreed issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) list owners, dependencies, target dates, and acceptance checks. Start with [repository setup #1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and [lab access #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
 
-Work on task branches and open pull requests to `main`. Samuele reviews, tests, and merges the changes. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [the reuse plan](docs/reuse.md) for the selected Satin Road functions.
+Kyrylo's tasks: [account storage #3](https://github.com/zsaamu/cds-compulsory-assignment/issues/3), [authentication #4](https://github.com/zsaamu/cds-compulsory-assignment/issues/4), [permissions #6](https://github.com/zsaamu/cds-compulsory-assignment/issues/6), and [Docker #12](https://github.com/zsaamu/cds-compulsory-assignment/issues/12).
 
-```text
-backend/          API and database
-frontend/         Browser interface
-tests/            Security and integration tests
-infrastructure/   Network plan and deployment
-docs/             Work plan, reuse notes, and test plan
-README.md         Combined assignment report
-```
+Azade's tasks: [web login #5](https://github.com/zsaamu/cds-compulsory-assignment/issues/5), [user table and management #7](https://github.com/zsaamu/cds-compulsory-assignment/issues/7), and [application checks #9](https://github.com/zsaamu/cds-compulsory-assignment/issues/9).
+
+Changes reach `main` through pull requests reviewed, tested, and merged by Samuele.
 
 ## Work plan
 
@@ -42,7 +37,7 @@ README.md         Combined assignment report
 | 4 November | Final review and early submission |
 | 5 November | Study and contingency |
 
-All dates are in 2026. Work is scheduled on weekdays only. See the [detailed timeline](docs/plan.md) and [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones).
+All dates are in 2026. Work is scheduled on weekdays only. The [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones) group the tasks by target date.
 
 ## CDS.security
 
@@ -60,11 +55,13 @@ All dates are in 2026. Work is scheduled on weekdays only. See the [detailed tim
 | Create, update, and delete superuser or admin accounts | No | No | Yes |
 | Assign or change a privileged role | No | No | Yes |
 
-Check permissions on every protected request, including the target account's role. Keep passwords and hashes out of the user table and API responses.
+Account actions must respect these permissions. Passwords and hashes must not appear in the user table or application responses.
+
+Technologies and frameworks are the team's choice and must be justified, particularly regarding security.
 
 ### Required documentation
 
-Describe the platform, authentication, password handling, role checks, technology choices, and security alternatives considered. Add relevant screenshots and verified setup and test instructions as implementation progresses. Use [the test plan](docs/test-plan.md) to collect results.
+The report must describe the platform, implemented security features, technology choices, and security alternatives considered, with relevant screenshots and results.
 
 ## CDS.infrastructure
 
@@ -84,9 +81,9 @@ Cover 15 desktops, 10 laptops, 3 printers, 3 servers, 12 IP phones, 4 wireless a
 | Client VM | 570 | 10.5.70.0/24 | To be selected |
 | Server VM | 571 | 10.5.71.0/24 | Ubuntu Server |
 
-Install Docker on the server and deploy the login platform in a container. Access it from the client VM using the server's IP and a TCP port from **8000 to 8100**; the proposed port is **8080**.
+The login platform must run in Docker on the server and be accessible from the client VM using the server's IP and a documented TCP port from **8000 to 8100**.
 
-The network firewall already permits TCP 8000-8100 from VLAN 570 to VLAN 571. Confirm lab access and the allocated VM addresses, gateways, DNS, and DHCP settings in [issue #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2). Follow [the infrastructure preparation](infrastructure/README.md) for the lab session.
+The network firewall already permits TCP 8000-8100 from VLAN 570 to VLAN 571. Lab access and VM network settings are tracked in [issue #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
 
 ### Required evidence and explanation
 
