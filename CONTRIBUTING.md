@@ -1,15 +1,17 @@
 # Working together
 
-Choose an assigned issue before starting. Read its expected result, acceptance checks, and dependencies. Keep each change small enough for another member to review.
+Choose an assigned issue before starting. Read its expected result, acceptance checks, and dependencies. Keep each change small enough to check in one review.
 
 ## Branches and pull requests
 
-- `main` contains the shared, reviewed work.
+- `main` contains work checked and accepted by Samuele.
 - `Samuele` is Samuele's initial setup branch, as requested.
 - Use a separate branch for each later task, for example `backend/login`, `frontend/user-table`, or `infrastructure/ip-plan`.
 - Start new task branches from the latest `main`. A dependent task can wait for the first pull request or clearly state its dependency.
 - Open a pull request to `main`, link the issue, and describe what changed and what was checked.
-- GitHub requires one approving review before merging into `main`, including for administrators. New commits dismiss previous approvals, and review conversations must be resolved.
+- Only Samuele (`zsaamu`) can merge pull requests into `main`. Kyrylo and Azade can push to their working branches and open pull requests.
+- Samuele checks the changes, runs the relevant tests, resolves the review conversations, and decides whether to merge. His own pull requests do not need approval from another member.
+- Direct pushes to `main` are blocked, including for Samuele. Every change reaches it through a pull request.
 - Force pushes and deletion of `main` are blocked. Required automated status checks will be added when the test workflow is available.
 
 To start after cloning:

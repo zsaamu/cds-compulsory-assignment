@@ -71,6 +71,6 @@ The [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones)
 
 ## How a task becomes complete
 
-Check the issue's acceptance list, record the actual verification, update the relevant README section, and have another member review the pull request. Do not close a task only because code has been copied or a screenshot folder exists.
+Check the issue's acceptance list, record the actual verification, and update the relevant README section. Samuele reviews and tests the pull request, then decides whether to merge it into `main`. His own pull requests do not require another member's approval. Do not close a task only because code has been copied or a screenshot folder exists.
 
 No oral presentation is specified in the compulsory assignment PDF. Explaining the solution together is a study and review activity.

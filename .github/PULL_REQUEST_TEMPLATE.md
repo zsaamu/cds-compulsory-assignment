@@ -13,4 +13,4 @@ List the checks actually run and their results. State what could not be checked.
 
 ## Review
 
-Ask another team member to review before merging.
+Ask Samuele (`zsaamu`) to review and test the changes. He decides when to merge into `main`.
