@@ -421,3 +421,10 @@ td:first-child {
     flex-wrap: wrap;
   }
 }
+
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+

@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { AccountDialog } from './AccountDialog';
+import { ApiError, createAccount, deleteAccount as deleteAccountRequest, getAccounts, login, updateAccount, type Session } from './api';
 import { LoginPage } from './LoginPage';
 import { UserDashboard } from './UserDashboard';
-import { readUsers, usersStorageKey } from './accounts';
-import type { Account, AccountForm, Role } from './types';
-import { canManage } from './permissions';
+import type { Account, AccountForm } from './types';
 
 export default function App() {
-  const [users, setUsers] = useState<Account[]>(readUsers);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [previewRole, setPreviewRole] = useState<Role>('admin');
+  const [users, setUsers] = useState<Account[]>([]);
+  const [session, setSession] = useState<Session | null>(null);
   const [dialogAccount, setDialogAccount] = useState<Account | null | undefined>();
   const [toast, setToast] = useState('');
-
-  useEffect(() => {
-    localStorage.setItem(usersStorageKey, JSON.stringify(users));
-  }, [users]);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState('');
 
   useEffect(() => {
     if (!toast) return;
@@ -23,60 +19,72 @@ export default function App() {
     return () => window.clearTimeout(timer);
   }, [toast]);
 
-  function enterPrototype() {
-    setIsLoggedIn(true);
-    setPreviewRole('admin');
+  async function handleLogin(username: string, password: string): Promise<string | null> {
+    try {
+      const signedIn = await login(username, password);
+      setSession(signedIn);
+      setLoading(true);
+      setLoadError('');
+      try { setUsers(await getAccounts(signedIn.token)); }
+      catch (error) {
+        if (error instanceof ApiError && error.status === 401) { setSession(null); return 'Your session was rejected. Please log in again.'; }
+        setLoadError(error instanceof Error ? error.message : 'Could not load accounts.');
+      } finally { setLoading(false); }
+      return null;
+    } catch (error) { return error instanceof Error ? error.message : 'Login failed. Please try again.'; }
+  }
+
+
+  async function refreshAccounts() {
+    if (!session) return;
+    setLoadError('');
+    setUsers(await getAccounts(session.token));
   }
 
   function logout() {
-    setIsLoggedIn(false);
-    setPreviewRole('admin');
+    setSession(null);
+    setUsers([]);
+    setLoadError('');
     setDialogAccount(undefined);
   }
 
-  function saveAccount(form: AccountForm): string | null {
-    if (!isLoggedIn) return 'Please log in again.';
-
-    const username = form.username.trim().toLowerCase();
-    const taken = users.some((user) => user.username.toLowerCase() === username && user.id !== dialogAccount?.id);
-    if (taken) return 'That username is already in use.';
-
-    if (dialogAccount) {
-      if (!canManage(previewRole, dialogAccount.role)) return 'You cannot edit this account.';
-      if (previewRole !== 'admin' && form.role !== 'user') return 'You cannot assign this role.';
-      setUsers((current) => current.map((user) => user.id === dialogAccount.id
-        ? { ...user, name: form.name.trim(), username, role: form.role } : user));
-      setToast('Account updated');
-    } else {
-      const canCreate = previewRole === 'admin' || (previewRole === 'superuser' && form.role === 'user');
-      if (!canCreate) return 'You cannot create this account.';
-      setUsers((current) => [...current, { id: crypto.randomUUID(), name: form.name.trim(), username, role: form.role }]);
-      setToast('Account added');
-    }
-
-    setDialogAccount(undefined);
-    return null;
+  async function saveAccount(form: AccountForm): Promise<string | null> {
+    if (!session) return 'Please log in again.';
+    try {
+      if (dialogAccount) {
+        await updateAccount(session.token, dialogAccount.id, form);
+        setToast('Account updated');
+      } else {
+        await createAccount(session.token, form);
+        setToast('Account added');
+      }
+      await refreshAccounts();
+      setDialogAccount(undefined);
+      return null;
+    } catch (error) { return error instanceof Error ? error.message : 'Could not save the account.'; }
   }
 
-  function deleteAccount(account: Account) {
-    if (!isLoggedIn || !canManage(previewRole, account.role)) return;
-    if (!window.confirm("Delete " + account.name + "'s account?")) return;
-    setUsers((current) => current.filter((user) => user.id !== account.id));
-    setToast('Account deleted');
+  async function removeAccount(account: Account) {
+    if (!session) return;
+    if (!window.confirm(`Delete ${account.name}'s account?`)) return;
+    try {
+      await deleteAccountRequest(session.token, account.id);
+      await refreshAccounts();
+      setToast('Account deleted');
+    } catch (error) { setLoadError(error instanceof Error ? error.message : 'Could not delete the account.'); }
   }
 
-  return (
-    <>
-      {isLoggedIn ? (
-        <UserDashboard users={users} previewRole={previewRole} onPreview={setPreviewRole}
-          onLogout={logout} onAdd={() => setDialogAccount(null)} onEdit={setDialogAccount} onDelete={deleteAccount} />
-      ) : <LoginPage onEnter={enterPrototype} />}
+  const visible = session !== null;
 
-      {isLoggedIn && dialogAccount !== undefined && (
-        <AccountDialog key={dialogAccount?.id ?? 'new'} account={dialogAccount} actor={previewRole}
-          onClose={() => setDialogAccount(undefined)} onSave={saveAccount} />
-      )}
-      {toast && <div className="toast" role="status">{toast}</div>}
-    </>
-  );
+  return <>
+    {visible ? <>\r\n      <UserDashboard users={users} role={session!.role} name={session!.name} loading={loading} loadError={loadError}
+        onLogout={logout} onAdd={() => setDialogAccount(null)} onEdit={setDialogAccount} onDelete={removeAccount} />
+    </> : <LoginPage onLogin={handleLogin} />}
+    {session && dialogAccount !== undefined && <AccountDialog key={dialogAccount?.id ?? 'new'} account={dialogAccount} actor={session.role}
+      onClose={() => setDialogAccount(undefined)} onSave={saveAccount} />}
+    {toast && <div className="toast" role="status">{toast}</div>}
+  </>;
 }
+
+
+
