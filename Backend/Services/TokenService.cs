@@ -1,18 +1,23 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Backend.Data;
 using Backend.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Backend.Services;
 
-public class AuthorizationService : IAuthorizationService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
+    private readonly AppDbContext _context;
 
-    public AuthorizationService(IConfiguration configuration)
+    public TokenService(IConfiguration configuration, AppDbContext context)
     {
         _configuration = configuration;
+        _context = context;
     }
 
     public string GenerateToken(User user)
@@ -24,6 +29,7 @@ public class AuthorizationService : IAuthorizationService
         {
             Subject = new ClaimsIdentity(new[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), 
                 new Claim(ClaimTypes.Name, user.Username),
                 new Claim(ClaimTypes.Role, user.Role)
             }),
@@ -35,5 +41,17 @@ public class AuthorizationService : IAuthorizationService
 
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+    
+    public async Task<User?> ValidateAndGetUserAsync(ClaimsPrincipal principal)
+    {
+        var idClaim = principal.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(idClaim) || !int.TryParse(idClaim, out int userId))
+        {
+            return null;
+        }
+        
+        var user = await _context.Users.FindAsync(userId);
+        return user; 
     }
 }

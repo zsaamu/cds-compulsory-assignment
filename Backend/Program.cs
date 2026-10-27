@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IAuthorizationService, AuthorizationService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? "DefaultFallbackSecretKey12345";
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);

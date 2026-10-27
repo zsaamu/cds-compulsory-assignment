@@ -5,7 +5,7 @@ using Backend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using IAuthorizationService = Backend.Services.IAuthorizationService;
+using ITokenService = Backend.Services.ITokenService;
 
 namespace Backend.Controllers;
 
@@ -14,12 +14,12 @@ namespace Backend.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly AppDbContext _context;
-    private readonly IAuthorizationService _authService;
+    private readonly ITokenService _authService;
 
-    public AuthController(AppDbContext context, IAuthorizationService authService)
+    public AuthController(AppDbContext context, ITokenService tokenService)
     {
         _context = context;
-        _authService = authService;
+        _authService = tokenService;
     }
     
     [HttpPost("register")]
@@ -71,34 +71,46 @@ public class AuthController : ControllerBase
     [Authorize] 
     public async Task<IActionResult> GetAllUsers()
     {
+        var currentUser = await _authService.ValidateAndGetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Unauthorized(new { message = "User no longer exists or token is invalid" });
+        }
+        
         var users = await _context.Users.Select(u => new { u.Id, u.Fullname, u.Username, u.Role }).ToListAsync();
         return Ok(users);
     }
     
     [HttpPost("users")]
-    [Authorize(Roles = "admin,superuser")]
+    [Authorize]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
     {
+        var currentUser = await _authService.ValidateAndGetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Unauthorized(new { message = "User no longer exists" });
+        }
+        
+        if (currentUser.Role != "admin" && currentUser.Role != "superuser")
+        {
+            return StatusCode(403, new { message = "Access denied. Insufficient permissions." });
+        }
         if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
         {
             return BadRequest(new { message = "Username is already taken" });
         }
         
-        var currentRole = User.FindFirstValue(ClaimTypes.Role);
         string targetRole = string.IsNullOrEmpty(dto.Role) ? "user" : dto.Role.ToLower();
-        
-        if (currentRole == "superuser" && targetRole != "user")
+        if (currentUser.Role == "superuser" && targetRole != "user")
         {
             return BadRequest(new { message = "Superusers can only create users with 'user' role" });
         }
-        
         if (targetRole != "user" && targetRole != "superuser" && targetRole != "admin")
         {
             return BadRequest(new { message = "Invalid role specified. Allowed roles: user, superuser, admin" });
         }
 
         string passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
         var user = new User
         {
             Fullname = dto.FullName,
@@ -114,18 +126,26 @@ public class AuthController : ControllerBase
     }
     
     [HttpPut("users/{id}")]
-    [Authorize(Roles = "admin,superuser")]
+    [Authorize]
     public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto dto)
     {
+        var currentUser = await _authService.ValidateAndGetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Unauthorized(new { message = "User no longer exists" });
+        }
+        if (currentUser.Role != "admin" && currentUser.Role != "superuser")
+        {
+            return StatusCode(403, new { message = "Access denied. Insufficient permissions." });
+        }
+        
         var targetUser = await _context.Users.FindAsync(id);
         if (targetUser == null)
         {
             return NotFound(new { message = "User not found" });
         }
         
-        var currentRole = User.FindFirstValue(ClaimTypes.Role);
-        
-        if (currentRole == "superuser")
+        if (currentUser.Role == "superuser")
         {
             if (targetUser.Role != "user")
             {
@@ -154,7 +174,7 @@ public class AuthController : ControllerBase
             targetUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
         }
         
-        if (!string.IsNullOrEmpty(dto.Role) && currentRole == "admin")
+        if (!string.IsNullOrEmpty(dto.Role) && currentUser.Role == "admin")
         {
             string newRole = dto.Role.ToLower();
             if (newRole == "user" || newRole == "superuser" || newRole == "admin")
@@ -168,17 +188,27 @@ public class AuthController : ControllerBase
     }
     
     [HttpDelete("users/{id}")]
-    [Authorize(Roles = "admin,superuser")]
+    [Authorize]
     public async Task<IActionResult> DeleteUser(int id)
     {
+        var currentUser = await _authService.ValidateAndGetUserAsync(User);
+        if (currentUser == null)
+        {
+            return Unauthorized(new { message = "User no longer exists" });
+        }
+        
+        if (currentUser.Role != "admin" && currentUser.Role != "superuser")
+        {
+            return StatusCode(403, new { message = "Access denied. Insufficient permissions." });
+        }
+        
         var targetUser = await _context.Users.FindAsync(id);
         if (targetUser == null)
         {
             return NotFound(new { message = "User not found" });
         }
         
-        var currentRole = User.FindFirstValue(ClaimTypes.Role);
-        if (currentRole == "superuser" && targetUser.Role != "user")
+        if (currentUser.Role == "superuser" && targetUser.Role != "user")
         {
             return BadRequest(new { message = "Superusers can only delete regular users" });
         }
