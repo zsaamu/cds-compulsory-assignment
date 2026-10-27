@@ -22,30 +22,6 @@ public class AuthController : ControllerBase
         _authService = tokenService;
     }
     
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
-    {
-        if (await _context.Users.AnyAsync(u => u.Username == dto.Username))
-        {
-            return BadRequest(new { message = "Username is already taken" });
-        }
-        
-        string passwordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password);
-
-        var user = new User
-        {
-            Fullname = dto.FullName,
-            Username = dto.Username,
-            PasswordHash = passwordHash,
-            Role = "user" 
-        };
-
-        _context.Users.Add(user);
-        await _context.SaveChangesAsync();
-
-        return Ok(new { message = "User registered successfully", username = user.Username });
-    }
-    
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
