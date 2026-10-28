@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: kvist_postgres
+    environment:
+      POSTGRES_DB: kvist_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+      start_period: 5s
+
+  backend:
+    build:
+      context: ./Backend   
+      dockerfile: Dockerfile
+    container_name: kvist_backend
+    ports:
+      - "8000:8080"        
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=kvist_db;Username=admin;Password=${POSTGRES_PASSWORD}
+      
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=Backend
+      - Jwt__Audience=Frontend
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
