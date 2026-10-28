@@ -21,7 +21,7 @@ The SQL query is:
 INSERT INTO "Users" ("Fullname", "Username", "PasswordHash", "Role")
 VALUES ('System Admin', '@admin', '$2a$11$JkBFAUgXsNma2OWzqtTQkOXVsiHTCRpYyRQ3/YX8armgq4nmqWKbC', 'admin');
 ```
-
+The password is "password"
 ## Security Architecture
 ### Password Hashing (BCrypt)
 User passwords are never saved in plain text in the database.

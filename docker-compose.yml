@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_DB: kvist_db
       POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secretpassword
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -21,9 +21,9 @@ services:
     ports:
       - "8000:8080"        
     environment:
-      - ConnectionStrings__DefaultConnection=Host=postgres;Database=kvist_db;Username=admin;Password=secretpassword
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=kvist_db;Username=admin;Password=${POSTGRES_PASSWORD}
       
-      - Jwt__Key=SuperSecretKey1234567890EncryptionKeyMustBeLongEnoughForJwtToken
+      - Jwt__Key=${JWT_KEY}
       - Jwt__Issuer=Backend
       - Jwt__Audience=Frontend
     depends_on:
