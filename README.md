@@ -33,9 +33,9 @@ docker compose up --build
 ```
 Open the apps in your browser:
 
-Frontend: http://localhost:3000
+Frontend: http://localhost:8000
 
-Backend: http://localhost:8000
+Backend: http://localhost:8000/swagger
    
 ## Security Architecture
 ### Password Hashing (BCrypt)
