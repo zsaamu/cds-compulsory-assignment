@@ -53,9 +53,15 @@ Click Authorize and close the window. You can now test all protected endpoints b
 
 ## Frontend Overview
 
-<img alt="login.png" height="200" src="../../Users/Azade/Desktop/readme/login.png" width="200"/> <img alt="user.png" height="200" src="../../Users/Azade/Desktop/readme/user.png" width="500"/>
-<img alt="Superuser.png" height="200" src="../../Users/Azade/Desktop/readme/Superuser.png" width="500"/> <img alt="Admin.png" height="200" src="../../Users/Azade/Desktop/readme/Admin.png" width="500"/>
-<img alt="create a user.png" height="200" src="../../Users/Azade/Desktop/readme/create%20a%20user.png" width="500"/>
+![Login page](screenshots/login.png)
+
+![User dashboard](screenshots/user.png)
+
+![Superuser dashboard](screenshots/Superuser.png)
+
+![Admin dashboard](screenshots/Admin.png)
+
+![Create a user dialog](screenshots/create-a-user.png)
 
 The frontend basically consists of:
 1.	Login page
