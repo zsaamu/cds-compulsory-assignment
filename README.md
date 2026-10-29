@@ -52,16 +52,27 @@ Click Authorize and close the window. You can now test all protected endpoints b
 
 
 ## Frontend Overview
+Login
 
 ![Login page](screenshots/login.png)
 
+User
+
 ![User dashboard](screenshots/user.png)
+
+Superuser
 
 ![Superuser dashboard](screenshots/Superuser.png)
 
+Admin
+
 ![Admin dashboard](screenshots/Admin.png)
 
+Create a user
+
 ![Create a user dialog](screenshots/create-a-user.png)
+
+
 
 The frontend basically consists of:
 1.	Login page
