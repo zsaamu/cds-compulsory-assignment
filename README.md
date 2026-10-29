@@ -14,6 +14,68 @@ Status: repository setup. Application development and deployment are pending.
 
 Each member documents their own work. Samuele and Kyrylo handle Docker deployment together.
 
+## First Admin Setup
+
+The SQL query is:
+```
+INSERT INTO "Users" ("Fullname", "Username", "PasswordHash", "Role")
+VALUES ('System Admin', '@admin', '$2a$11$JkBFAUgXsNma2OWzqtTQkOXVsiHTCRpYyRQ3/YX8armgq4nmqWKbC', 'admin');
+```
+The password is "password"
+## Security Architecture
+### Password Hashing (BCrypt)
+User passwords are never saved in plain text in the database.
+
+We use the BCrypt library (BCrypt.Net-Next) to hash passwords securely with an automatic salt.
+
+This protects user data against database leaks and password cracking attacks.
+
+### Authentication & Authorization (JWT)
+The project uses JWT (JSON Web Tokens) for secure, stateless login.
+
+After a successful login, the server creates a token using a secret key.
+
+The token includes the user's ID, username, and role.
+
+**Instant Session Control**: To keep the app secure, every protected request checks the database to verify if the user still exists and has the correct role. If an account is deleted or changed, the access updates immediately.
+
+### How to test using Swagger UI
+Send a POST request to /login using a test account's username and password.
+
+Copy the token value from the response body.
+
+Click the Authorize button (the lock icon) at the top right of the Swagger UI page.
+
+Paste your token into the input field. (Note: You do not need to type the word "Bearer", just paste the token code).
+
+Click Authorize and close the window. You can now test all protected endpoints based on your user role.
+
+
+## Frontend Overview
+
+<img alt="login.png" height="200" src="../../Users/Azade/Desktop/readme/login.png" width="200"/> <img alt="user.png" height="200" src="../../Users/Azade/Desktop/readme/user.png" width="500"/>
+<img alt="Superuser.png" height="200" src="../../Users/Azade/Desktop/readme/Superuser.png" width="500"/> <img alt="Admin.png" height="200" src="../../Users/Azade/Desktop/readme/Admin.png" width="500"/>
+<img alt="create a user.png" height="200" src="../../Users/Azade/Desktop/readme/create%20a%20user.png" width="500"/>
+
+The frontend basically consists of:
+1.	Login page
+2.	One dashboard
+3.	Dialog for creating a user
+
+The login page takes users to the dashboard based on their roles. There are three roles.
+All three have the same page design, but their access levels differ.
+
+•	Admin: Can manage admins, superusers, and users.
+
+•	Superuser: Can manage users.
+
+•	User: Can only view and read user information.
+
+Tests
+
+The frontend is tested manually to check that the login page, dashboard, and create-user dialog work as expected. Testing also includes checking that each role has the correct access permissions.
+
+
 ## Issues and workflow
 
 The [agreed issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) list owners, dependencies, target dates, and acceptance checks. Start with [repository setup #1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and [lab access #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
