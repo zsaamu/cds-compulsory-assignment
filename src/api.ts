@@ -1,6 +1,6 @@
 import type { Account, AccountForm, Role } from './types';
 
-const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:5033').replace(/\/$/, '');
+const API_URL = (import.meta.env.VITE_API_URL ?? 'http://localhost:8000').replace(/\/$/, '');
 
 type ApiUser = { id: number | string; fullname?: string; fullName?: string; name?: string; username: string; role: string };
 export type Session = { token: string; name: string; username: string; role: Role };

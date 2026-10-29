@@ -22,6 +22,21 @@ INSERT INTO "Users" ("Fullname", "Username", "PasswordHash", "Role")
 VALUES ('System Admin', '@admin', '$2a$11$JkBFAUgXsNma2OWzqtTQkOXVsiHTCRpYyRQ3/YX8armgq4nmqWKbC', 'admin');
 ```
 The password is "password"
+
+## How to Run (Setup Instructions)
+
+Create a `.env` file in the root directory based on your credentials/secrets 
+
+Run the application using Docker Compose:
+```
+docker compose up --build
+```
+Open the apps in your browser:
+
+Frontend: http://localhost:3000
+
+Backend: http://localhost:8000
+   
 ## Security Architecture
 ### Password Hashing (BCrypt)
 User passwords are never saved in plain text in the database.
