@@ -2,7 +2,7 @@
 
 Login and user management platform for Kvist & Bjælke ApS, with network planning and Docker deployment. This README is the combined report for **CDS.security** and **CDS.infrastructure**.
 
-Status: repository setup. Application development and deployment are pending.
+Status: the application passes local Docker, API, and browser tests. Deployment on the academy VMs and communication between VLANs are still to be verified.
 
 ## Responsibilities
 
@@ -16,26 +16,52 @@ Each member documents their own work. Samuele and Kyrylo handle Docker deploymen
 
 ## First Admin Setup
 
-The SQL query is:
+After starting the containers below, open the database console:
+
+```sh
+docker compose exec postgres psql -U admin -d kvist_db
 ```
+
+Run this query once on a fresh database to create the local test admin:
+
+```sql
 INSERT INTO "Users" ("Fullname", "Username", "PasswordHash", "Role")
 VALUES ('System Admin', '@admin', '$2a$11$JkBFAUgXsNma2OWzqtTQkOXVsiHTCRpYyRQ3/YX8armgq4nmqWKbC', 'admin');
 ```
-The password is "password"
+Log in with username `@admin` and password `password`. These are test-only credentials. Exit the database console with `\q`.
 
 ## How to Run (Setup Instructions)
 
-Create a `.env` file in the root directory based on your credentials/secrets 
+Docker and Docker Compose must be installed and running. Use the latest `main` and run the following steps from the repository root.
 
-Run the application using Docker Compose:
+1. Create a local `.env` file with the two required variables:
+
+```dotenv
+JWT_KEY=<generated-JWT-secret>
+POSTGRES_PASSWORD=<generated-database-password>
 ```
-docker compose up --build
+
+Replace both placeholders with generated values. On Ubuntu, run `openssl rand -hex 32` for the JWT secret and `openssl rand -hex 24` for the database password, then copy each result into its corresponding variable. Keep `.env` local; Git ignores it.
+
+For this Docker setup, remove any old `VITE_API_URL` setting from the build environment and local Vite environment files. The frontend uses the current server address and Nginx forwards `/api` requests to the internal backend.
+
+2. Build and start all three services:
+
+```sh
+docker compose up --build -d --wait
+docker compose ps
 ```
-Open the apps in your browser:
 
-Frontend: http://localhost:8000
+3. Create the first admin using the section above. The database starts automatically, but the admin account is created manually.
 
-Backend: http://localhost:8000/swagger
+4. Open the application:
+
+| Access | Application | Swagger |
+| --- | --- | --- |
+| On the server itself | `http://localhost:8000` | `http://localhost:8000/swagger` |
+| From the client VM | `http://<server-IP>:8000` | `http://<server-IP>:8000/swagger` |
+
+Replace `<server-IP>` with the server VM's assigned address. TCP port **8000** is published by Nginx; the backend is reached through Nginx inside the Docker network.
    
 ## Security Architecture
 ### Password Hashing (BCrypt)
@@ -55,7 +81,7 @@ The token includes the user's ID, username, and role.
 **Instant Session Control**: To keep the app secure, every protected request checks the database to verify if the user still exists and has the correct role. If an account is deleted or changed, the access updates immediately.
 
 ### How to test using Swagger UI
-Send a POST request to /login using a test account's username and password.
+Send a POST request to `/api/Auth/login` using a test account's username and password.
 
 Copy the token value from the response body.
 
