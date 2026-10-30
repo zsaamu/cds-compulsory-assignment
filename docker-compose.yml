@@ -21,20 +21,27 @@ services:
 
   backend:
     build:
-      context: ./Backend   
+      context: ./Backend
       dockerfile: Dockerfile
     container_name: kvist_backend
-    ports:
-      - "8000:8080"        
     environment:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=kvist_db;Username=admin;Password=${POSTGRES_PASSWORD}
-      
       - Jwt__Key=${JWT_KEY}
       - Jwt__Issuer=Backend
       - Jwt__Audience=Frontend
     depends_on:
       postgres:
         condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: kvist_frontend
+    ports:
+      - "8000:80"  
+    depends_on:
+      - backend
 
 volumes:
   pgdata:
