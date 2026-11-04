@@ -93,28 +93,37 @@ Click Authorize and close the window. You can now test all protected endpoints b
 
 ## Issues and workflow
 
-The [agreed issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) list owners, dependencies, target dates, and acceptance checks. Start with [repository setup #1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and [lab access #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
-
-Kyrylo's tasks: [account storage #3](https://github.com/zsaamu/cds-compulsory-assignment/issues/3), [authentication #4](https://github.com/zsaamu/cds-compulsory-assignment/issues/4), [permissions #6](https://github.com/zsaamu/cds-compulsory-assignment/issues/6), and [Docker #12](https://github.com/zsaamu/cds-compulsory-assignment/issues/12).
-
-Azade's tasks: [web login #5](https://github.com/zsaamu/cds-compulsory-assignment/issues/5), [user table and management #7](https://github.com/zsaamu/cds-compulsory-assignment/issues/7), and [application checks #9](https://github.com/zsaamu/cds-compulsory-assignment/issues/9).
+The [issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) contain owners and completion checks. The [project board](https://github.com/users/zsaamu/projects/3/views/1) uses Todo, In Progress, and Done. An open issue can have completed code while report evidence or final integration is still pending.
 
 Changes reach `main` through pull requests reviewed, tested, and merged by Samuele.
 
+### Remaining work after the 4 November lab session
+
+| Work | Owner / support | Status and next action |
+| --- | --- | --- |
+| Lab connection and server gateway, #2 | Samuele with Henrik/IT; Kyrylo supplies handover | Blocked: server cannot reach 10.5.71.5. Confirm VM attachment and upstream VLAN path; approved remote access is unconfirmed. |
+| Company IP plan and diagrams, #10 / #11 | Samuele | Written in PR #26. Review subnet choices and rendered diagrams, then merge; these tasks do not require a working lab network. |
+| Docker deployment, #12 | Kyrylo | Done for packaging and server-side serving: three services running, HTTP 200 on server IP port 8000. Cross-VLAN use is tracked separately in #14. |
+| VM configuration evidence, #13 | Samuele; Kyrylo hands over existing VMs | In progress: collect final client adapter/DNS, confirm disk installation, and resolve server gateway connectivity. |
+| Academy login, roles and direct client access, #14 | Samuele with group support | Pending: first-admin/login verification, client-to-server access and all three role checks. The attempted login command did not execute; HTTP 200 alone is not a login test. |
+| Local security evidence, #8 | Samuele | Local role tests passed; add results to the report. Keep them separate from academy tests. |
+| Frontend explanation and screenshots, #9 | Azade; Samuele reviews | Local browser tests passed. Review PR #25 and integrate its evidence without replacing newer setup/network documentation. |
+| Combined README and reflection, #15 | Samuele coordinates; each member documents their part | In progress from home: integrate evidence, alternatives, final reflection and documentation PRs. |
+| Final requirements review, #16 | Samuele | Todo after the report and test results are ready; record any unresolved requirement and teacher guidance. |
+| Moodle group and submission, #17 | Samuele | Todo: confirm group registration, assessor access and submission receipt before 6 November at 23:59. |
+
+Kyrylo's handover should identify the two VM accounts, admin-account creation status, final client network setting, local changes and whether the VMs are running. Share credentials privately and preserve the existing project, `.env`, database volume and VM disks. VM addresses are DHCP leases and must be checked again on the next visit.
+
 ## Work plan
 
-| Date | Target |
+| Date (2026) | Work and result / target |
 | --- | --- |
-| 26 October | Repository, responsibilities, and lab access |
-| 27-28 October | Login, user management, and all three roles |
-| 29 October | Integration and permission tests |
-| 30 October | Docker, IP plan, subnetting, and network diagram |
-| 2 November | VM deployment and tests between VLANs |
-| 3 November | Fixes, evidence, and completed report |
-| 4 November | Final review and early submission |
-| 5 November | Study and contingency |
+| 26-30 October | Repository and roles set up; frontend/backend integrated and locally tested; full Docker setup merged. |
+| 4 November | Academy server deployment and client VM prepared. Client reaches its gateway; server gateway and direct cross-VLAN test remain blocked. Company IP plan and diagrams completed in PR #26. |
+| Thursday 5 November | Samuele resumes the existing VMs, seeks Henrik/IT guidance, retries academy login/role and cross-VLAN checks, and gathers missing evidence. In parallel, finish the README and review PRs #25/#26 from home. |
+| Friday 6 November | Review the final main version, verify Moodle group/access, and submit before 23:59. If connectivity is still blocked, record the limitation and the teacher's response; do not count it as a passed test. |
 
-All dates are in 2026. Work is scheduled on weekdays only. The [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones) group the tasks by target date.
+Work is scheduled on weekdays only. The original 4 November early-submission target was not reached. These revised targets do not change the official deadline. The [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones) group the issues; current remaining actions and targets are listed above and in each issue.
 
 ## CDS.security
 
