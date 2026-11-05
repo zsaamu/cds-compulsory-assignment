@@ -63,8 +63,7 @@ The following screenshots were taken in Firefox inside academy client VM 115, us
 
 ![Superuser account permissions](screenshots/academy/03-firefox-role-tests/03-superuser-permissions.jpg)
 
-<details>
-<summary>Successful superuser changes and test-account cleanup</summary>
+#### Successful superuser changes and test-account cleanup
 
 ![Superuser edits an ordinary user](screenshots/academy/03-firefox-role-tests/04-superuser-edit.jpg)
 
@@ -74,7 +73,6 @@ The following screenshots were taken in Firefox inside academy client VM 115, us
 
 Admin created the test accounts; superuser edited/deleted the ordinary account; admin removed the temporary superuser.
 
-</details>
 
 ### Security choices and alternatives
 
@@ -241,8 +239,7 @@ The implemented lab uses two VMs on Proxmox node `pve02` (management `10.5.70.12
 
 The existing VNet `VLAN571` (alias `Servers`) applies tag 571. The client receives the assigned client subnet through untagged `vmbr0`; the physical switch/native VLAN mapping was not independently inspected. Both IPs are DHCP leases: recheck them with `ip -br address` before a demonstration.
 
-<details>
-<summary>Client installation and installed disk</summary>
+#### Client installation and installed disk
 
 ![Ubuntu Desktop installation](screenshots/academy/01-virtual-machines/01-client-ubuntu-installation.png)
 
@@ -252,14 +249,12 @@ The existing VNet `VLAN571` (alias `Servers`) applies tag 571. The client receiv
 
 Installation stages, running desktop and the installed root disk are shown above.
 
-</details>
 
 ### Ubuntu Server and Docker deployment
 
 Azade installed Ubuntu Server in VM 101 (`azadeserver`), with two CPU cores, 4 GiB RAM and a 32 GiB virtual disk. She installed Docker Engine and the Compose plugin from Docker's Ubuntu package repository and verified them with `sudo docker run hello-world`. Recorded versions are Docker 29.9.2 and Compose v5.6.1.
 
-<details>
-<summary>Ubuntu Server and Docker installation evidence from Azade</summary>
+#### Ubuntu Server and Docker installation evidence from Azade
 
 ![Ubuntu Server installation complete](screenshots/infrastructure/ubuntu-installation-complete.png)
 
@@ -271,7 +266,6 @@ Azade installed Ubuntu Server in VM 101 (`azadeserver`), with two CPU cores, 4 G
 
 These screenshots record the initial installation on 30 October. Use the final VM/network table above for the configuration verified on 5 November.
 
-</details>
 
 The group deployed checkout `81e1227` using the setup steps in CDS.security. PostgreSQL creates the database; the API's `EnsureCreated` creates its schema. Before role testing, the test admin password was restored and its role corrected from `Admin` to lowercase `admin`. Existing secrets and data were preserved.
 
