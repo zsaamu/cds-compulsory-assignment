@@ -221,7 +221,7 @@ The employee /24 is specified by the assignment and provides space beyond the 25
 This diagram is the proposed company topology. The router/firewall provides a gateway for each segment, routes permitted traffic between them, and controls Internet access. The managed switch carries VLANs to the relevant devices. Lines show network connections; they do not grant unrestricted access between segments.
 
 ```mermaid
-flowchart TB
+flowchart LR
     internet["Internet"] --- fw["Router / firewall<br/>Inter-VLAN gateways and access rules"]
     fw --- sw["Managed switch<br/>VLAN-capable links"]
     sw --- staff["VLAN 570 - Employees<br/>10.5.70.0/24<br/>15 desktops + 10 laptops"]
