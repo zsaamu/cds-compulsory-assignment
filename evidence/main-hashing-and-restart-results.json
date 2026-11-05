@@ -1,0 +1,29 @@
+{
+  "scope": "Local main 81e1227, isolated Compose database; no academy VM changes",
+  "results": [
+    {
+      "test": "Passwords stored as 60-character BCrypt values",
+      "passed": true
+    },
+    {
+      "test": "Equal passwords receive different salted hashes",
+      "passed": true
+    },
+    {
+      "test": "Database retained accounts across stop/start",
+      "passed": true
+    },
+    {
+      "test": "Admin login succeeds after service restart",
+      "passed": true
+    },
+    {
+      "test": "Frontend responds after restart",
+      "passed": true
+    },
+    {
+      "test": "Only bootstrap admin remains",
+      "passed": true
+    }
+  ]
+}

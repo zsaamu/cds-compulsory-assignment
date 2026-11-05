@@ -1,0 +1,65 @@
+{
+  "scope": "Local isolated main 81e1227, browser on 127.0.0.1:8000; not an academy network retest",
+  "results": [
+    {
+      "test": "Wrong password displays an error",
+      "passed": true
+    },
+    {
+      "test": "Admin login through non-localhost hostname",
+      "passed": true
+    },
+    {
+      "test": "Ordinary user is read-only",
+      "passed": true
+    },
+    {
+      "test": "Superuser cannot manage privileged rows",
+      "passed": true
+    },
+    {
+      "test": "Superuser role selection limited to ordinary users",
+      "passed": true
+    },
+    {
+      "test": "Superuser creates an ordinary account",
+      "passed": true
+    },
+    {
+      "test": "Superuser saves account edits",
+      "passed": true
+    },
+    {
+      "test": "Superuser deletes the ordinary account",
+      "passed": true
+    },
+    {
+      "test": "Admin can select all three roles",
+      "passed": true
+    },
+    {
+      "test": "Logout returns to login",
+      "passed": true
+    },
+    {
+      "test": "Login fits a narrow viewport",
+      "passed": true
+    },
+    {
+      "test": "No browser JavaScript exceptions",
+      "passed": true
+    },
+    {
+      "test": "Swagger available through Nginx",
+      "passed": true
+    },
+    {
+      "test": "OpenAPI document available through Nginx",
+      "passed": true
+    },
+    {
+      "test": "Browser fixtures removed",
+      "passed": true
+    }
+  ]
+}

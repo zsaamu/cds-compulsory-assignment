@@ -1,0 +1,252 @@
+{
+  "scope": "Local isolated main 81e1227, localhost:8000; academy network excluded",
+  "results": [
+    {
+      "test": "Existing admin login",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Existing admin role",
+      "passed": true,
+      "actual": "admin",
+      "expected": "admin"
+    },
+    {
+      "test": "Anonymous users request",
+      "passed": true,
+      "actual": 401,
+      "expected": 401
+    },
+    {
+      "test": "Public registration absent",
+      "passed": true,
+      "actual": 404,
+      "expected": 404
+    },
+    {
+      "test": "Wrong password rejected",
+      "passed": true,
+      "actual": 401,
+      "expected": 401
+    },
+    {
+      "test": "Admin reads users",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "API omits password hashes",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "test": "Create user as user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Login user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Returned role user",
+      "passed": true,
+      "actual": "user",
+      "expected": "user"
+    },
+    {
+      "test": "Create super as superuser",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Login superuser",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Returned role superuser",
+      "passed": true,
+      "actual": "superuser",
+      "expected": "superuser"
+    },
+    {
+      "test": "Create admin as admin",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Login admin",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Returned role admin",
+      "passed": true,
+      "actual": "admin",
+      "expected": "admin"
+    },
+    {
+      "test": "User reads users",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "User cannot create",
+      "passed": true,
+      "actual": 403,
+      "expected": 403
+    },
+    {
+      "test": "User cannot edit",
+      "passed": true,
+      "actual": 403,
+      "expected": 403
+    },
+    {
+      "test": "User cannot delete",
+      "passed": true,
+      "actual": 403,
+      "expected": 403
+    },
+    {
+      "test": "Superuser reads users",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Superuser creates ordinary user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Superuser edits ordinary user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Superuser cannot promote ordinary user",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot create superuser",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot create admin",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot edit superuser",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot delete superuser",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot edit admin",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser cannot delete admin",
+      "passed": true,
+      "actual": 400,
+      "expected": 400
+    },
+    {
+      "test": "Superuser deletes ordinary user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Admin edits another admin",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Admin changes role",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Old admin token loses write permission after demotion",
+      "passed": true,
+      "actual": 403,
+      "expected": 403
+    },
+    {
+      "test": "Admin deletes superuser",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Deleted account token rejected",
+      "passed": true,
+      "actual": 401,
+      "expected": 401
+    },
+    {
+      "test": "Admin deletes ordinary user",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "Deleted ordinary user token rejected",
+      "passed": true,
+      "actual": 401,
+      "expected": 401
+    },
+    {
+      "test": "Cleanup test account 4",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    },
+    {
+      "test": "Existing admin still works after tests",
+      "passed": true,
+      "actual": 200,
+      "expected": 200
+    },
+    {
+      "test": "No test accounts remain",
+      "passed": true,
+      "actual": true,
+      "expected": true
+    }
+  ],
+  "remaining_fixture_ids": []
+}
