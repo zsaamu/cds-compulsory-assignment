@@ -42,7 +42,7 @@ Nginx serves React and forwards `/api/` and `/swagger` to the backend. Browser r
 
 After login, `TokenService` issues an HMAC-SHA256 signed JWT with account ID, username, role and a three-hour expiry. ASP.NET validates its signature, issuer, audience and lifetime. The frontend keeps the token in React memory and sends it in the `Authorization: Bearer <token>` header. Refreshing the page requires login again. JWT payloads are readable, so they contain no password.
 
-Every protected account endpoint also retrieves the current database account. Authorization uses its current role: demotion removes write access immediately, and deletion invalidates that account's existing sessions. Public registration is absent; permitted roles create accounts.
+Every protected account endpoint also retrieves the current database account. Authorization uses its current role: role changes apply to existing sessions immediately, and deletion invalidates that account's existing sessions. Public registration is absent; permitted roles create accounts.
 
 ### Authorization and interface
 
@@ -59,20 +59,17 @@ The following screenshots were taken in Firefox inside academy client VM 115, us
 
 ![Admin logged in from the client](screenshots/academy/03-firefox-role-tests/01-admin-login.jpg)
 
+*Admin: account-management actions are available.*
+
 ![Ordinary user read-only session](screenshots/academy/03-firefox-role-tests/02-user-read-only.jpg)
+
+*User: all rows are read-only; creation, editing and deletion are unavailable.*
 
 ![Superuser account permissions](screenshots/academy/03-firefox-role-tests/03-superuser-permissions.jpg)
 
-#### Successful superuser changes and test-account cleanup
+*Superuser: ordinary accounts are editable; privileged accounts remain read-only.*
 
-![Superuser edits an ordinary user](screenshots/academy/03-firefox-role-tests/04-superuser-edit.jpg)
-
-![Superuser deletes the ordinary test user](screenshots/academy/03-firefox-role-tests/05-superuser-delete.jpg)
-
-![Admin after removing temporary accounts](screenshots/academy/03-firefox-role-tests/06-admin-final-cleanup.jpg)
-
-Admin created the test accounts; superuser edited/deleted the ordinary account; admin removed the temporary superuser.
-
+The shared dashboard changes its available actions by role. Additional browser evidence records a successful [superuser edit](screenshots/academy/03-firefox-role-tests/04-superuser-edit.jpg) and [deletion](screenshots/academy/03-firefox-role-tests/05-superuser-delete.jpg). The admin removed the remaining temporary account after testing; cleanup is also verified in the API results.
 
 ### Security choices and alternatives
 
@@ -249,7 +246,6 @@ The existing VNet `VLAN571` (alias `Servers`) applies tag 571. The client receiv
 
 Installation stages, running desktop and the installed root disk are shown above.
 
-
 ### Ubuntu Server and Docker deployment
 
 Azade installed Ubuntu Server in VM 101 (`azadeserver`), with two CPU cores, 4 GiB RAM and a 32 GiB virtual disk. She installed Docker Engine and the Compose plugin from Docker's Ubuntu package repository and verified them with `sudo docker run hello-world`. Recorded versions are Docker 29.9.2 and Compose v5.6.1.
@@ -265,7 +261,6 @@ Azade installed Ubuntu Server in VM 101 (`azadeserver`), with two CPU cores, 4 G
 ![Successful Docker hello-world test](screenshots/infrastructure/docker-hello-world.png)
 
 These screenshots record the initial installation on 30 October. Use the final VM/network table above for the configuration verified on 5 November.
-
 
 The group deployed checkout `81e1227` using the setup steps in CDS.security. PostgreSQL creates the database; the API's `EnsureCreated` creates its schema. Before role testing, the test admin password was restored and its role corrected from `Admin` to lowercase `admin`. Existing secrets and data were preserved.
 
@@ -310,8 +305,6 @@ VLANs separate Layer 2 broadcast domains. The client and server are in different
 The assignment's existing firewall permits client VLAN 570 -> server VLAN 571 on TCP 8000-8100. We changed no shared firewall rules and tested port 8000. Limiting ports reduces exposure of unrelated services; this test does not establish access on other ports or in the reverse direction.
 
 ### Connectivity and deployment evidence
-
-![Final server DHCP lease and successful gateway ping](screenshots/academy/02-network-and-deployment/01-server-dhcp-and-gateway.jpg)
 
 ![Client request reaches the server and returns HTTP 200](screenshots/academy/02-network-and-deployment/02-client-cross-vlan-http-200.jpg)
 
