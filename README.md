@@ -6,11 +6,11 @@ Status: repository setup. Application development and deployment are pending.
 
 ## Responsibilities
 
-| Member | GitHub | Responsibility |
-| --- | --- | --- |
-| Samuele | [zsaamu](https://github.com/zsaamu) | Network plan, VMs, testing, report coordination, and final review/merge |
-| Kyrylo | [Kyrylo-Vorona](https://github.com/Kyrylo-Vorona) | User account storage, username/password authentication, password hashing, and role permissions |
-| Azade | [azade1416](https://github.com/azade1416) | Web login, user table, and account management actions for each role |
+| Member | GitHub | Responsibility                                                                                                                                           |
+| --- | --- |----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Samuele | [zsaamu](https://github.com/zsaamu) | Network plan, VMs, testing, report coordination, and final review/merge                                                                                  |
+| Kyrylo | [Kyrylo-Vorona](https://github.com/Kyrylo-Vorona) | User account storage, username/password authentication, password hashing, and role permissions                                                           |
+| Azade | [azade1416](https://github.com/azade1416) | Web login, user table, and account management actions for each role, install virtualization software, create Ubuntu Server VM, install and verify Docker |
 
 Each member documents their own work. Samuele and Kyrylo handle Docker deployment together.
 
@@ -93,87 +93,42 @@ Tests
 The frontend is tested manually to check that the login page, dashboard, and create-user dialog work as expected. Testing also includes checking that each role has the correct access permissions.
 
 
-## Issues and workflow
+# infrastructure
 
-The [agreed issues](https://github.com/zsaamu/cds-compulsory-assignment/issues) list owners, dependencies, target dates, and acceptance checks. Start with [repository setup #1](https://github.com/zsaamu/cds-compulsory-assignment/issues/1) and [lab access #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
+This screenshot displays the VM configuration in Proxmox, showing the network tag set to 571
 
-Kyrylo's tasks: [account storage #3](https://github.com/zsaamu/cds-compulsory-assignment/issues/3), [authentication #4](https://github.com/zsaamu/cds-compulsory-assignment/issues/4), [permissions #6](https://github.com/zsaamu/cds-compulsory-assignment/issues/6), and [Docker #12](https://github.com/zsaamu/cds-compulsory-assignment/issues/12).
+![Proxmox VM configuration showing VLAN 571](screenshots/infrastructure/proxmox-vm-vlan571.png)
 
-Azade's tasks: [web login #5](https://github.com/zsaamu/cds-compulsory-assignment/issues/5), [user table and management #7](https://github.com/zsaamu/cds-compulsory-assignment/issues/7), and [application checks #9](https://github.com/zsaamu/cds-compulsory-assignment/issues/9).
+Here is the Ubuntu network configuration showing the server has received the IP address 10.5.71.164 on VLAN 571
 
-Changes reach `main` through pull requests reviewed, tested, and merged by Samuele.
+![Ubuntu Server received IP address 10.5.71.164](screenshots/infrastructure/server-ip-10-5-71-164.png)
 
-## Work plan
+The completion of the Ubuntu Server installation, showing the system ready to reboot
 
-| Date | Target |
-| --- | --- |
-| 26 October | Repository, responsibilities, and lab access |
-| 27-28 October | Login, user management, and all three roles |
-| 29 October | Integration and permission tests |
-| 30 October | Docker, IP plan, subnetting, and network diagram |
-| 2 November | VM deployment and tests between VLANs |
-| 3 November | Fixes, evidence, and completed report |
-| 4 November | Final review and early submission |
-| 5 November | Study and contingency |
+![Ubuntu Server installation complete](screenshots/infrastructure/ubuntu-installation-complete.png)
 
-All dates are in 2026. Work is scheduled on weekdays only. The [milestones](https://github.com/zsaamu/cds-compulsory-assignment/milestones) group the tasks by target date.
+The successful login screen for the Ubuntu Server, confirming the system is up and running with the assigned IPv4 address 10.5.71.164
 
-## CDS.security
+![Ubuntu Server login and assigned IP address](screenshots/infrastructure/ubuntu-server-login-and-ip.png)
 
-### Application requirements
+This screenshot shows the installation process for Docker and Docker Compose on the Ubuntu Server
 
-- Web application with username/password login.
-- Passwords stored with a secure password-hashing algorithm and never exposed in plaintext.
-- Backend authorization for the three required roles.
-- Application capable of running in Docker.
+![Docker Engine and Compose plugin installed](screenshots/infrastructure/docker-compose-installed.png)
 
-| Action | User | Superuser | Admin |
-| --- | --- | --- | --- |
-| Read the user table | Yes | Yes | Yes |
-| Create, update, and delete ordinary user accounts | No | Yes | Yes |
-| Create, update, and delete superuser or admin accounts | No | No | Yes |
-| Assign or change a privileged role | No | No | Yes |
+Here is the Docker installation and a successful hello-world test, which confirms that Docker is installed and functioning correctly
 
-Account actions must respect these permissions. Passwords and hashes must not appear in the user table or application responses.
+![Docker hello-world container ran successfully](screenshots/infrastructure/docker-hello-world.png)
 
-Technologies and frameworks are the team's choice and must be justified, particularly regarding security.
+Here we have the source code downloaded to the Ubuntu Server via git clone, and the files for the application are visible
 
-### Required documentation
+![The project repository cloned onto the Ubuntu Server](screenshots/infrastructure/repository-cloned.png)
 
-The report must describe the platform, implemented security features, technology choices, and security alternatives considered, with relevant screenshots and results.
 
-## CDS.infrastructure
 
-### Company network plan
+# Final reflection
 
-Cover 15 desktops, 10 laptops, 3 printers, 3 servers, 12 IP phones, 4 wireless access points, 6 cameras, network equipment, and a variable number of guest devices, allowing for growth.
+Challenges:
 
-- Justify the network segmentation.
-- Specify private subnets, masks/CIDR, gateways, device groups, and DHCP or static addressing.
-- Explain network addresses, masks, usable host counts, sizing, and growth for at least two subnets.
-- Include a diagram showing Internet access, router/firewall, switches, VLANs, servers, device groups, wireless networks, and their connections.
+One challenge was that we could not do the steps remotely. We had to be at the academy to get the correct IP.
 
-### Lab deployment
-
-| Machine | VLAN | Network | Operating system |
-| --- | --- | --- | --- |
-| Client VM | 570 | 10.5.70.0/24 | To be selected |
-| Server VM | 571 | 10.5.71.0/24 | Ubuntu Server |
-
-The login platform must run in Docker on the server and be accessible from the client VM using the server's IP and a documented TCP port from **8000 to 8100**.
-
-The network firewall already permits TCP 8000-8100 from VLAN 570 to VLAN 571. Lab access and VM network settings are tracked in [issue #2](https://github.com/zsaamu/cds-compulsory-assignment/issues/2).
-
-### Required evidence and explanation
-
-Document Ubuntu Server installation, both VMs' IP configuration, Docker installation, the running container and published port, and successful use of the platform from the client VM.
-
-Explain VLAN separation, routing between the networks, the firewall's role, and why access is limited to specific ports. Record implementation problems, their causes, fixes, and retest results.
-
-## Final report and submission
-
-Complete the Security and Infrastructure sections with the implemented solution, screenshots, tables, diagrams, and test results. Conclude with a short reflection on how security and infrastructure connect, deployment lessons, and changes needed for a real company.
-
-Register the group on Moodle, confirm the assessor can access the GitHub repository, and submit through Moodle by **6 November 2026 at 23:59**. Our target submission date is **4 November**.
-
-Source: `Compulsory-assignment.pdf`, case Kvist & Bjælke ApS, pages 2-9.
+The second challenge was when I created the virtual machine in Proxmox. In the Bridge field, I needed to enter vmbr0, but I couldn't type it manually or select it from the dropdown list because it was showing a "Connection error". This was annoying because my internet connection was fine, and vmbr0 was available under System → Network. It was important to add this because the bridge connects the Ubuntu VM to the academy's network. I had to refresh Proxmox multiple times. Later, vmbr0 finally appeared in the list, so I selected it quickly before another unexpected issue happened.
